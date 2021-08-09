@@ -92,15 +92,16 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("DefaultLocale")
     private fun loadImages(isAsync: Boolean) {
+        val loadImageSize = 3L
         var randomPokemonIds: IntArray
         do {
             // sizeは3つで、1から500まで範囲のランダムな数値を返す.
-            randomPokemonIds = Random().ints(3, 1, 501).toArray()
+            randomPokemonIds = Random().ints(loadImageSize, 1, 501).toArray()
         } while (Arrays.stream(randomPokemonIds).distinct()
-                .count() != 2L
+                .count() != loadImageSize
         ) // ランダムに生成した値が、他と被ったら再度ランダム値を作り直す.
 
-        // debug: あたりの数値をログ出し
+        // debug
         for (randomPokemonId in randomPokemonIds) {
             Log.i("MainActivity", "randomPokemonId = $randomPokemonId")
         }

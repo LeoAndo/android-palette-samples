@@ -93,11 +93,12 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("DefaultLocale")
     private void loadImages(boolean isAsync) {
+        final int loadImageSize = 3;
         int[] randomPokemonIds;
         do {
             // sizeは3つで、1から500まで範囲のランダムな数値を返す.
-            randomPokemonIds = new Random().ints(3, 1, 501).toArray();
-        } while (Arrays.stream(randomPokemonIds).distinct().count() != 2); // ランダムに生成した値が、他と被ったら再度ランダム値を作り直す.
+            randomPokemonIds = new Random().ints(loadImageSize, 1, 501).toArray();
+        } while (Arrays.stream(randomPokemonIds).distinct().count() != loadImageSize); // ランダムに生成した値が、他と被ったら再度ランダム値を作り直す.
 
         // debug: あたりの数値をログ出し
         for (int randomPokemonId : randomPokemonIds) {
