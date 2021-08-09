@@ -18,55 +18,59 @@ import com.bumptech.glide.request.transition.Transition;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ImageView imageView;
+    private ImageView imageView2;
+    private ImageView imageView3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final ImageView imageView = findViewById(R.id.imageView);
-        final ImageView imageView2 = findViewById(R.id.imageView2);
-        final ImageView imageView3 = findViewById(R.id.imageView3);
-
-        final ImageView imageView4 = findViewById(R.id.imageView4);
-        final ImageView imageView5 = findViewById(R.id.imageView5);
-        final ImageView imageView6 = findViewById(R.id.imageView6);
-
-        loadImage(imageView4, "https://assets.pokemon.com/assets/cms2/img/pokedex/full/220.png", imageView);
-        loadImage(imageView5, "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/3.gif", imageView2);
-        loadImage(imageView6, "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/4.gif", imageView3);
+        imageView = findViewById(R.id.imageView);
+        imageView2 = findViewById(R.id.imageView2);
+        imageView3 = findViewById(R.id.imageView3);
+        loadImages(true);
     }
 
     public void onClickAction(View view) {
+        boolean isAsync = false;
         if (view.getId() == R.id.buttonAsyncGenerate) {
-
-        } else if (view.getId() == R.id.buttonSyncGenerate) {
-
+            isAsync = true;
         }
+        loadImages(isAsync);
     }
 
-    private void loadImage(ImageView targetView, String url, ImageView paintTargetView) {
-        Glide.with(this)
+    private void loadImage(ImageView targetView, String url, boolean isAsync) {
+        Glide.with(targetView.getContext())
                 .load(url)
                 .into(new DrawableImageViewTarget(targetView) {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                         super.onResourceReady(resource, transition);
+                        Bitmap bitmap = null;
 
+                        // pngの場合
                         if (resource instanceof BitmapDrawable) {
                             final BitmapDrawable bitmapDrawable = (BitmapDrawable) resource;
-                            final Bitmap bitmap = bitmapDrawable.getBitmap();
-                            if (bitmap != null) {
-                                // pngの場合
-                            }
+                            bitmap = bitmapDrawable.getBitmap();
                         }
 
+                        // gifの場合
                         if (resource instanceof GifDrawable) {
                             final GifDrawable gifDrawable = (GifDrawable) resource;
                             gifDrawable.setLoopCount(3);
-                            if (gifDrawable.getFirstFrame() != null) {
-                                // gifの場合
-                            }
+                            bitmap = gifDrawable.getFirstFrame();
+                        }
+
+                        // TODO paletteの処理
+                        if (bitmap != null) {
+
                         }
                     }
                 });
+    }
+
+    private void loadImages(boolean isAsync) {
+        // TODO
     }
 }

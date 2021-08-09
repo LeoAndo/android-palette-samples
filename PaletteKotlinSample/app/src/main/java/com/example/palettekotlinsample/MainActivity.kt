@@ -1,5 +1,6 @@
 package com.example.palettekotlinsample
 
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
@@ -12,40 +13,29 @@ import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.bumptech.glide.request.transition.Transition
 
 class MainActivity : AppCompatActivity() {
+    private var imageView: ImageView? = null
+    private var imageView2: ImageView? = null
+    private var imageView3: ImageView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val imageView = findViewById<ImageView>(R.id.imageView)
-        val imageView2 = findViewById<ImageView>(R.id.imageView2)
-        val imageView3 = findViewById<ImageView>(R.id.imageView3)
-        val imageView4 = findViewById<ImageView>(R.id.imageView4)
-        val imageView5 = findViewById<ImageView>(R.id.imageView5)
-        val imageView6 = findViewById<ImageView>(R.id.imageView6)
-        loadImage(
-            imageView4,
-            "https://assets.pokemon.com/assets/cms2/img/pokedex/full/220.png",
-            imageView
-        )
-        loadImage(
-            imageView5,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/3.gif",
-            imageView2
-        )
-        loadImage(
-            imageView6,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/4.gif",
-            imageView3
-        )
+        imageView = findViewById(R.id.imageView)
+        imageView2 = findViewById(R.id.imageView2)
+        imageView3 = findViewById(R.id.imageView3)
+        loadImages(true)
     }
 
     fun onClickAction(view: View) {
+        var isAsync = false
         if (view.id == R.id.buttonAsyncGenerate) {
-        } else if (view.id == R.id.buttonSyncGenerate) {
+            isAsync = true
         }
+        loadImages(isAsync)
     }
 
-    private fun loadImage(targetView: ImageView, url: String, paintTargetView: ImageView) {
-        Glide.with(this)
+    private fun loadImage(targetView: ImageView, url: String, isAsync: Boolean) {
+        Glide.with(targetView.context)
             .load(url)
             .into(object : DrawableImageViewTarget(targetView) {
                 override fun onResourceReady(
@@ -53,19 +43,28 @@ class MainActivity : AppCompatActivity() {
                     transition: Transition<in Drawable?>?
                 ) {
                     super.onResourceReady(resource, transition)
+                    var bitmap: Bitmap? = null
+
+                    // pngの場合
                     if (resource is BitmapDrawable) {
-                        val bitmap = resource.bitmap
-                        if (bitmap != null) {
-                            // pngの場合
-                        }
+                        bitmap = resource.bitmap
                     }
+
+                    // gifの場合
                     if (resource is GifDrawable) {
-                        resource.setLoopCount(3)
-                        if (resource.firstFrame != null) {
-                            // gifの場合
-                        }
+                        val gifDrawable = resource
+                        gifDrawable.setLoopCount(3)
+                        bitmap = gifDrawable.firstFrame
+                    }
+
+                    // TODO paletteの処理
+                    if (bitmap != null) {
                     }
                 }
             })
+    }
+
+    private fun loadImages(isAsync: Boolean) {
+        // TODO
     }
 }
