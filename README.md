@@ -20,7 +20,7 @@ implementation("androidx.palette:palette-ktx:1.0.0")
 https://github.com/LeoAndo/android-palette-samples/tree/main/PaletteJavaSample
 
 # For Kotlin code
-https://github.com/LeoAndo/android-palette-samples/tree/main/PaletteJavaSample
+https://github.com/LeoAndo/android-palette-samples/tree/main/PaletteKotlinSample
 
 # testData(image url)
 pokemon png<br>
