@@ -3,11 +3,15 @@ package com.example.palettejavasample;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.palette.graphics.Palette;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -15,6 +19,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.bumptech.glide.request.transition.Transition;
+
+import java.util.Arrays;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,15 +69,47 @@ public class MainActivity extends AppCompatActivity {
                             bitmap = gifDrawable.getFirstFrame();
                         }
 
-                        // TODO paletteの処理
+                        // paletteの処理
                         if (bitmap != null) {
-
+                            Palette.Builder builder = new Palette.Builder(bitmap);
+                            if (isAsync) {
+                                builder.generate(palette -> {
+                                    if (palette != null) {
+                                        final int dominantColor =
+                                                palette.getDominantColor(ContextCompat.getColor(MainActivity.this, R.color.black));
+                                        targetView.setBackgroundColor(dominantColor);
+                                    }
+                                });
+                            } else {
+                                final Palette palette = builder.generate();
+                                final int dominantColor =
+                                        palette.getDominantColor(ContextCompat.getColor(MainActivity.this, R.color.black));
+                                targetView.setBackgroundColor(dominantColor);
+                            }
                         }
                     }
                 });
     }
 
+    @SuppressLint("DefaultLocale")
     private void loadImages(boolean isAsync) {
-        // TODO
+        int[] randomPokemonIds;
+        do {
+            // sizeは3つで、1から500まで範囲のランダムな数値を返す.
+            randomPokemonIds = new Random().ints(3, 1, 501).toArray();
+        } while (Arrays.stream(randomPokemonIds).distinct().count() != 2); // ランダムに生成した値が、他と被ったら再度ランダム値を作り直す.
+
+        // debug: あたりの数値をログ出し
+        for (int randomPokemonId : randomPokemonIds) {
+            Log.i("MainActivity", "randomPokemonId = " + randomPokemonId);
+        }
+
+        // load image...
+        final String id1 = String.format("%03d", randomPokemonIds[0]); // pngファイルは0埋めあり。 pokemon APIの仕様
+        final int id2 = randomPokemonIds[1]; // gifファイルは0埋めなし。 pokemon APIの仕様
+        final int id3 = randomPokemonIds[2];
+        loadImage(imageView, "https://assets.pokemon.com/assets/cms2/img/pokedex/full/" + id1 + ".png", isAsync);
+        loadImage(imageView2, "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/" + id2 + ".gif", isAsync);
+        loadImage(imageView3, "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/" + id3 + ".gif", isAsync);
     }
 }
