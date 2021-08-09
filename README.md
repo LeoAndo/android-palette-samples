@@ -7,5 +7,21 @@ paletteライブラリは1.0リリース後にUpdateがなく、ライブラリ�
 # capture
 <img src="https://user-images.githubusercontent.com/16476224/128722209-6ccbbae1-c16d-42a0-848b-35769e48abc0.gif" width=320 />
 
+# For Java code
+https://github.com/LeoAndo/android-palette-samples/tree/main/PaletteJavaSample
+
+# For Kotlin code
+https://github.com/LeoAndo/android-palette-samples/tree/main/PaletteJavaSample
+
+# testData(image url)
+pokemon png<br>
+https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png<br>
+https://assets.pokemon.com/assets/cms2/img/pokedex/full/500.png<br>
+
+pokemon gif<br>
+https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/1.gif<br>
+https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/500.gif<br>
+
+
 # refs
 https://developer.android.com/reference/androidx/palette/graphics/package-summary
